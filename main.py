@@ -1,24 +1,32 @@
 from fastapi import FastAPI
 from fastapi import Body
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = FastAPI()
-
+openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # path operation or root function
 @app.get("/")
-async def root():
-    return {"message": "Welcome to my website!"}
+async def root_controller():
+    return {"status": "healthy"}
 
-@app.get("/about")
-async def about():
-    return {"message": "This is the about page of my website."}
-
-@app.get("/posts")
-async def get_posts():
-    return {"message": "Here are all the posts on my website."}
-
-@app.post("/posts")
-async def create_post(payload: dict = Body(...)):
-    print('payload: ', payload)
-    return payload
+@app.get("/chat")
+def chat_controller(prompt: str = "Inspire me"):
+    response = openai_client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": 'system', "content": "You are a helpful assistant."
+            },
+            {
+                "role": 'user', "content": prompt
+            }
+        ]
+    )
+    statement = response.choices[0].message.content
+    return {"statement": statement}
 
