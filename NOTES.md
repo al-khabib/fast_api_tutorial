@@ -33,3 +33,13 @@ pip install "fastapi[standard]" uvicorn openai
 ```
 
 - `uvicorn` package is the bare-bones web server that FastAPI runs on.
+
+- The app object—which is created from the FastAPI class—converts your Python
+  function with a decorator into a Hypertext Transfer Protocol (HTTP) endpoint. You
+  can trigger both endpoints by sending an HTTP request.
+
+#### Terminology
+
+- thread
+- synchronous and asynchronous workflow
+- concurrency
