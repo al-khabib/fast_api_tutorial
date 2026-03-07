@@ -43,3 +43,9 @@ pip install "fastapi[standard]" uvicorn openai
 - thread
 - synchronous and asynchronous workflow
 - concurrency
+
+#### Lifespan events
+
+#### Security and Authentical Components
+
+#### Bidirectional Web Socket, GraphQL, and Custom Response Support
