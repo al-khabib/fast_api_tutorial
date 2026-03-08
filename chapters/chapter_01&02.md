@@ -245,3 +245,64 @@ AI. As a result, it remains a general-purpose web framework with recent support 
 AI serving and ML workflows. However, for certain use cases, such as serving
 resource-intensive and complex billion-parameter models, it may be worth exploring
 other frameworks like BentoML.
+
+### Setting up managed Python environment and tooling
+
+recommended:
+• Using a requirements.txt file with pip for simpler projects
+• Using uv or Conda for pip-driven workflows
+• Using Poetry for more complex projects
+
+It is best practice for professional Python developers to use these tools to catch bugs
+during development and before adding changes to the code repository. In fact, I rec‐
+ommend that you run code checks with these tools against your codebase frequently
+to prevent bugs from appearing in your services.
+Here is a nonexhaustive list of Python packages that I recommend integrating into
+any project you start:
+
+Linters
+These tools analyze source code to flag programming errors, stylistic errors, and
+unused code snippets:
+• Autoflake: Removes unused imports and variables from code to improve
+readability
+• Flake8: Checks against Python enhancement proposals (PEPs) and code
+styles
+
+Formatters
+These enable you to better see what you have written:
+• isort: Sorts imports in Python modules
+• Black: Formats Python code for readability
+• Ruff: Rust-based linter and formatter that is extremely fast and can be used
+as a replacement for other tools such as isort, black, flake8, and possibly
+bandit
+
+Loggers
+application:
+Used in parts of the code that gets complex to debug and monitor your
+• Loguru: Replacing Python’s built-in logger module
+
+Scanners
+If you want confidence that you did not commit insecure code or passwords by
+• Bandit: Vulnerability scanning of your Python codebase with checking
+against common security issues such as hard-coded secrets
+• Safety: Python dependency vulnerability scanner to detect packages with
+known vulnerabilities or malicious packages
+
+Type checkers
+To catch those bugs that normal linters do not catch. Also, great if you want con‐
+fidence that changes in your schemas did not break your application:
+• Mypy: A powerful static type checker that can help catch a lot of bugs in your
+code
+• Pylance: A type checker that ships with Microsoft’s Python extension for VS
+Code
+
+---
+
+LINK to FastAPI Black Template that includes integrations with common tools that one can use as a foundation for projects
+
+```
+
+https://github.com/Ali-Parandeh/fastapi-blank-template
+```
+
+---
