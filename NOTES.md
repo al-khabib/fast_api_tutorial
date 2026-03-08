@@ -159,4 +159,24 @@ you may be asking yourself, “Which project structure should I
 adopt for building generative AI services with FastAPI?”
 
 I found that the best way to structure projects is to progressively reorganize your
-project from a flat to a modular structure as your service complexity grows:
+project from a flat to a modular structure as your service complexity grows.
+
+Thinking about the structure of your large FastAPI application is only the first step in
+building production-grade services. In the next step, you will learn more about a soft‐
+ware design pattern that helps you manage the complexity of your AI services. This is
+called the onion, or layered, application design pattern, which we will talk about next.
+
+### Onion/Layered Application Design Pattern
+
+- Can be implemented in the nested or modular structures.
+- The purpose of this pattern is to create a separation of concerns between the different parts of your
+  application to simplify the process of adding, removing, and modifying features.
+
+![alt text](./media/onion.png)
+Figure 2-3. Onion design pattern
+
+- The main idea behind this pattern is the <strong>dependency inversion principle</strong>
+
+[![SOLID Principle. DIP](https://youtu.be/9oHY5TllWaU)](https://youtu.be/9oHY5TllWaU)
+
+Thread, THread pool, ASGI(asynchronous Server Gateway Interface)
