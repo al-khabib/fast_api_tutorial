@@ -179,4 +179,69 @@ Figure 2-3. Onion design pattern
 
 [![SOLID Principle. DIP](https://youtu.be/9oHY5TllWaU)](https://youtu.be/9oHY5TllWaU)
 
-Thread, THread pool, ASGI(asynchronous Server Gateway Interface)
+Thread, THread pool, WSGI vs ASGI(asynchronous Server Gateway Interface)
+[![WSGI & ASGI]](https://youtu.be/LtpJup6vcS4)
+
+#### Fast API Limitations
+
+<strong>Inefficinet Model Memory Mangement</strong>
+FastAPI does provide built-in mechanisms for sharing model memory between mul‐
+tiple instances or processes of the same container. This means when scaling web
+workers horizontally, you need to load a whole new model instance into the contain‐
+er’s memory. This creates a memory bottleneck and increases operational costs of
+high-traffic GenAI services.
+
+<strong>Limited Number of Threads</strong>
+There is a limit to the number of threads that FastAPI creates on application startup
+in the internal thread pool.
+This means there is also a limit to how much you can scale a single instance of
+FastAPI, especially with AI workloads that have heavy I/O as well as CPU/GPU-
+intensive operations.
+
+<strong>Restricted to Global Interpreter Lock</strong>
+In Python, multithreading can produce unintuitive and often counterproductive
+results because of the Global Interpreter Lock (GIL).
+FastAPI leverages multithreading via an internal thread pool to handle concurrent
+web requests hitting a synchronous route. However, even with asynchronous end‐
+points, the AI inference requests can still block the main event loop, preventing all
+other requests from being processed in the main web serving thread.
+
+This is because AI inference workloads are CPU/GPU intensive. Non-I/O operations,
+such as serving an expensive model or aggregating large amounts of data on a worker,
+will cause other threads to wait as Python currently is not using multiple cores for
+threading.10 Instead, as you’ll learn more in Chapter 5, for these kinds of expensive
+compute operations, you’ll need to use multiprocessing or a process pool instead.
+
+<strong>Lack of Support for Micro-Batch Processing Inference Requrests</strong>
+Deep learning frameworks provide support for vectorization so that inferences can be
+batched together, efficiently computed, and parallelized. Unfortunately, prediction
+requests can’t be batched together in FastAPI, and as a result, each compute-intensive
+model inference operation can block other requests.
+When scaling services, a solution is to serve heavy models separately and use FastAPI
+to authenticate and manage the incoming and outgoing data.
+
+<strong>Cannot Efficiently Split AI Workloads Between CPU and GPU</strong>
+While the CPU mostly handles request transformation and validation operations, the
+GPU can run and parallelize compute-intensive model inference. In some specialized
+ML web frameworks (like BentoML), you can also efficiently split AI workloads
+between the CPU and GPU.
+
+Unfortunately, FastAPI can’t efficiently perform this split of the AI inference work‐
+load between these devices. This means your CPU can be blocked from processing
+requests even when inference processes are running on the GPU. As this is a big bot‐
+tleneck when working with heavier models, it will require serving heavier models
+outside FastAPI for concurrent workloads
+
+<strong>Dependency Conflicts</strong>
+When you are deploying ML models, you will face unique challenges compared to
+deploying typical web applications. This is due to your model runtime’s deep cou‐
+pling with native libraries and hardware. Each deployment environment can operate
+on distinct hardware and may require you to use specific versions of native libraries
+and containerization commands.
+
+<strong>Lack of Support for Resource intensive AI workloads</strong>
+Despite its incredible capabilities, FastAPI was developed before the rise of generative
+AI. As a result, it remains a general-purpose web framework with recent support for
+AI serving and ML workflows. However, for certain use cases, such as serving
+resource-intensive and complex billion-parameter models, it may be worth exploring
+other frameworks like BentoML.
